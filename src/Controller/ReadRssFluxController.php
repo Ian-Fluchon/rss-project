@@ -3,39 +3,22 @@
 namespace App\Controller;
 
 use App\Entity\FeedRss;
+use App\Message\GetActualityLinkMessage;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ReadRssFluxController extends AbstractController
 {
     #[Route('/read', name: 'app_read')]
-    public function index(EntityManagerInterface $em): Response
+    public function index(MessageBusInterface $bus): Response
     {
 
-        $url = new FeedRss();
-        $link = $em->getRepository(FeedRss::class)->findAll();
+        $bus->dispatch(new GetActualityLinkMessage());
 
-        foreach ($link as $url) {
-
-            $rssLink = $url->getUrl();
-            dump($rssLink);
-            $rssLoad = simplexml_load_file($rssLink);
-            $items = [];
-
-            foreach ($rssLoad->channel->item as $link) {
-                $items[] = $link->source->attributes();
-
-                $links = implode(" ", $items);
-                $links = explode(" ", $links);
-
-                dump($links);
-            }
-        }
-
-
-
+        return $this->redirectToRoute('app_home');
 
         return $this->render('read_rss_flux/index.html.twig', [
             'controller_name' => 'ReadRssFluxController',
