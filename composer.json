@@ -83,10 +83,14 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+            "assets:install %PUBLIC_DIR%": "symfony-cmd",
+            "doctrine:schema:update -f": "symfony-cmd"
+            
         },
         "post-install-cmd": [
-            "@auto-scripts"
+            "@auto-scripts",
+            "npm install",
+            "npm run dev"
         ],
         "post-update-cmd": [
             "@auto-scripts"

@@ -2,7 +2,14 @@
 
 namespace App\MessageHandler;
 
+use App\Entity\FeedRss;
+use App\Entity\WebSite;
 use App\Message\FetchOneUrlMessage;
+use App\Message\PersisteUrlMessage;
+use Symfony\Component\Intl\Countries;
+use Symfony\Component\Intl\Languages;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
@@ -10,8 +17,12 @@ final class FetchOneUrlMessageHandler implements MessageHandlerInterface
 {
     
 
-    public function __construct(private HttpClientInterface $httpClient)
+    public function __construct(
+        private HttpClientInterface $httpClient,
+        private MessageBusInterface $bus
+        )
     {
+
     }
 
     public function __invoke(FetchOneUrlMessage $message)
@@ -26,8 +37,12 @@ final class FetchOneUrlMessageHandler implements MessageHandlerInterface
         ]);
 
         if ($response->getStatusCode() === 200) {
-            // procéder à la sauvegarde dans la BDD (de préférence en utilisant un autre message Handler)
-            dump($url);
+
+            $this->bus->dispatch(new PersisteUrlMessage(
+                $url, $alpha2languages, $alpha2countries
+            ));
+
+            
         }
     }
 }

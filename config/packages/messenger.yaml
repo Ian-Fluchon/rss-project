@@ -15,6 +15,7 @@ framework:
         routing:
             App\Message\FetchUrlMessage: async            # Symfony\Component\Notifier\Message\ChatMessage: async
             App\Message\FetchOneUrlMessage: async
+            App\Message\PersisteUrlMessage: async
             # Symfony\Component\Notifier\Message\SmsMessage: async
 
             # Route your messages to the transports
