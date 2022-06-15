@@ -2,13 +2,8 @@
 
 namespace App\MessageHandler;
 
-use App\Entity\FeedRss;
-use App\Entity\WebSite;
 use App\Message\FetchOneUrlMessage;
 use App\Message\PersisteUrlMessage;
-use Symfony\Component\Intl\Countries;
-use Symfony\Component\Intl\Languages;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
