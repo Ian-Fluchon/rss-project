@@ -5,7 +5,6 @@ namespace App\MessageHandler;
 use App\Entity\FeedRss;
 use App\Message\PersisteUrlMessage;
 use Doctrine\ORM\EntityManagerInterface;
-use App\MessageHandler\FetchOneUrlMessageHandler;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
@@ -15,7 +14,7 @@ final class PersisteUrlMessageHandler implements MessageHandlerInterface
     public function __construct(
         private EntityManagerInterface $em
     ){}
-    public function __invoke(FetchOneUrlMessageHandler $message)
+    public function __invoke(PersisteUrlMessage $message)
     {
         
             $feedRss = new FeedRss();
