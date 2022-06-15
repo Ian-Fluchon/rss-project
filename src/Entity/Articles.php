@@ -43,8 +43,10 @@ class Articles
     #[ORM\Column(type: 'datetime')]
     private $CreationDate;
 
-    #[ORM\OneToOne(mappedBy: 'ArticleUrl', targetEntity: ArticleLink::class, cascade: ['persist', 'remove'])]
-    private $articleLink;
+    #[ORM\OneToOne(inversedBy: 'articles', targetEntity: ArticleLink::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private $idArticleLink;
+
 
     public function getId(): ?int
     {
@@ -171,25 +173,16 @@ class Articles
         return $this;
     }
 
-    public function getArticleLink(): ?ArticleLink
+    public function getIdArticleLink(): ?ArticleLink
     {
-        return $this->articleLink;
+        return $this->idArticleLink;
     }
 
-    public function setArticleLink(?ArticleLink $articleLink): self
+    public function setIdArticleLink(ArticleLink $idArticleLink): self
     {
-        // unset the owning side of the relation if necessary
-        if ($articleLink === null && $this->articleLink !== null) {
-            $this->articleLink->setArticleUrl(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($articleLink !== null && $articleLink->getArticleUrl() !== $this) {
-            $articleLink->setArticleUrl($this);
-        }
-
-        $this->articleLink = $articleLink;
+        $this->idArticleLink = $idArticleLink;
 
         return $this;
     }
+
 }

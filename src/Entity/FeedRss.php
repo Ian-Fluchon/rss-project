@@ -24,6 +24,9 @@ class FeedRss
     #[ORM\Column(type: 'text', unique : true)]
     private $url;
 
+    #[ORM\OneToOne(mappedBy: 'idFeedRss', targetEntity: WebSite::class, cascade: ['persist', 'remove'])]
+    private $webSite;
+
    
 
     public function getId(): ?int
@@ -63,6 +66,23 @@ class FeedRss
     public function setUrl(string $url): self
     {
         $this->url = $url;
+
+        return $this;
+    }
+
+    public function getWebSite(): ?WebSite
+    {
+        return $this->webSite;
+    }
+
+    public function setWebSite(WebSite $webSite): self
+    {
+        // set the owning side of the relation if necessary
+        if ($webSite->getIdFeedRss() !== $this) {
+            $webSite->setIdFeedRss($this);
+        }
+
+        $this->webSite = $webSite;
 
         return $this;
     }

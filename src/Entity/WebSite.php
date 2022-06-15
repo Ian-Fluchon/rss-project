@@ -25,6 +25,13 @@ class WebSite
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $name;
 
+    #[ORM\OneToOne(mappedBy: 'idSiteWeb', targetEntity: SiteMapRss::class, cascade: ['persist', 'remove'])]
+    private $siteMapRss;
+
+    #[ORM\OneToOne(inversedBy: 'webSite', targetEntity: FeedRss::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private $idFeedRss;
+
 
     public function getId(): ?int
     {
@@ -75,6 +82,35 @@ class WebSite
     public function setName(?string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getSiteMapRss(): ?SiteMapRss
+    {
+        return $this->siteMapRss;
+    }
+
+    public function setSiteMapRss(SiteMapRss $siteMapRss): self
+    {
+        // set the owning side of the relation if necessary
+        if ($siteMapRss->getIdSiteWeb() !== $this) {
+            $siteMapRss->setIdSiteWeb($this);
+        }
+
+        $this->siteMapRss = $siteMapRss;
+
+        return $this;
+    }
+
+    public function getIdFeedRss(): ?FeedRss
+    {
+        return $this->idFeedRss;
+    }
+
+    public function setIdFeedRss(FeedRss $idFeedRss): self
+    {
+        $this->idFeedRss = $idFeedRss;
 
         return $this;
     }

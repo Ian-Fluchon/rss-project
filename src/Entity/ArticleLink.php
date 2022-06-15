@@ -19,8 +19,16 @@ class ArticleLink
     #[ORM\Column(type: 'string', length: 255)]
     private $Country;
 
-    #[ORM\OneToOne(inversedBy: 'articleLink', targetEntity: Articles::class, cascade: ['persist', 'remove'])]
-    private $ArticleUrl;
+
+    #[ORM\OneToOne(inversedBy: 'articleLink', targetEntity: SiteMapRss::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private $idSiteMapRss;
+
+    #[ORM\Column(type: 'text')]
+    private $urlArticle;
+
+    #[ORM\OneToOne(mappedBy: 'idArticleLink', targetEntity: Articles::class, cascade: ['persist', 'remove'])]
+    private $articles;
 
     public function getId(): ?int
     {
@@ -51,14 +59,44 @@ class ArticleLink
         return $this;
     }
 
-    public function getArticleUrl(): ?Articles
+
+    public function getIdSiteMapRss(): ?SiteMapRss
     {
-        return $this->ArticleUrl;
+        return $this->idSiteMapRss;
     }
 
-    public function setArticleUrl(?Articles $ArticleUrl): self
+    public function setIdSiteMapRss(SiteMapRss $idSiteMapRss): self
     {
-        $this->ArticleUrl = $ArticleUrl;
+        $this->idSiteMapRss = $idSiteMapRss;
+
+        return $this;
+    }
+
+    public function getUrlArticle(): ?string
+    {
+        return $this->urlArticle;
+    }
+
+    public function setUrlArticle(string $urlArticle): self
+    {
+        $this->urlArticle = $urlArticle;
+
+        return $this;
+    }
+
+    public function getArticles(): ?Articles
+    {
+        return $this->articles;
+    }
+
+    public function setArticles(Articles $articles): self
+    {
+        // set the owning side of the relation if necessary
+        if ($articles->getIdArticleLink() !== $this) {
+            $articles->setIdArticleLink($this);
+        }
+
+        $this->articles = $articles;
 
         return $this;
     }
